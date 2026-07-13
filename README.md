@@ -18,22 +18,27 @@
 ## Overview
 
 <div align="center">
-  <img src="figs/overview.png" width="80%"/>
+  <img src="Fig/fig1.png" width="80%"/>
+  <p><b>Figure 1:</b> An example of MMDynOpt-Agent. The agent enhances MLLM reasoning by dynamically optimizing prompts.</p>
 </div>
 
 **MMDynOpt** addresses a fundamental challenge in multimodal AI agents—how to dynamically optimize the interaction strategy between a policy LLM and external multimodal tools over multiple turns. **MMDynOpt** is an **end-to-end reinforcement learning (RL)** framework built on [veRL](https://github.com/volcengine/verl) that trains small-scale LLMs to act as adaptive agents, learning when and how to query external multimodal LLMs, refine prompts, and aggregate evidence across multiple reasoning rounds. By leveraging **GRPO (Group Relative Policy Optimization)** with carefully designed reward signals—including format adherence, answer correctness (EM/F1), and inference budget penalties—**MMDynOpt** produces agents that achieve strong task-solving performance while maintaining computational efficiency.
 
 <div align="center">
-  <img src="static/images/method.png" width="90%"/>
+  <img src="Fig/fig3.png" width="90%"/>
+  <p><b>Figure 3:</b> Overview of the MMDynOpt-Agent framework. A multimodal agent is trained via reinforcement learning to dynamically generate optimized prompts for MLLMs. DOP: dynamic optimization prompt. R. R.: reasoning response.</p>
 </div>
 
 By integrating **dynamic multi-turn agent interaction** with **reinforcement learning**, **MMDynOpt** offers a **plug-and-play framework** that supports both **training** and **evaluation** with various multimodal LLMs serving as the external environment.
 
 ## Experimental Results
 
-**Results across 15 multimodal benchmarks:**
 <div align="center">
-  <img src="figs/results.png" width="100%"/>
+  <img src="Fig/fig4.png" width="100%"/>
+  <p><b>Figure 4:</b> Comparison of average EM, F1, and SSim of 4 MLLMs with and without MMDynOpt-Agent on 9 training datasets.</p>
+  <br/>
+  <img src="Fig/fig5.png" width="100%"/>
+  <p><b>Figure 5:</b> Comparison of F1 scores of four unseen MLLMs with and without MMDynOpt-Agent on five OOD datasets.</p>
 </div>
 
 ## Installation
