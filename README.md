@@ -18,7 +18,7 @@
 ## Overview
 
 <div align="center">
-  <img src="Fig/fig1.png" width="80%"/>
+  <img src="Fig/fig1.png" width="70%"/>
   <p><b>Figure 1:</b> An example of MMDynOpt-Agent. The agent enhances MLLM reasoning by dynamically optimizing prompts.</p>
 </div>
 
