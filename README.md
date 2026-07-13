@@ -34,7 +34,7 @@ By integrating **dynamic multi-turn agent interaction** with **reinforcement lea
 ## Experimental Results
 
 <div align="center">
-  <img src="Fig/fig4.png" width="100%"/>
+  <img src="Fig/fig4.png" width="65%"/>
   <p><b>Figure 4:</b> Comparison of average EM, F1, and SSim of 4 MLLMs with and without MMDynOpt-Agent on 9 training datasets.</p>
   <br/>
   <img src="Fig/fig5.png" width="100%"/>
