@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MMDynOpt: Dynamic Multi-turn Optimization for Multimodal LLM Agents via End-to-end Reinforcement Learning">
+  <title>MMDynOpt | Dynamic Multi-turn Optimization for Multimodal LLM Agents</title>
+
+  <style>
+    :root {
+      --bg:            #ffffff;
+      --bg-soft:       #f7f9fc;
+      --bg-card:       #f0f4f8;
+      --bg-code:       #f4f7fa;
+      --text:          #2d3748;
+      --text-secondary:#5a6c7d;
+      --blue:          #4a8fe7;
+      --blue-light:    #dceeff;
+      --blue-soft:     #eef5fc;
+      --green:         #4caf87;
+      --green-light:   #d4f1e4;
+      --green-soft:    #eefaf4;
+      --border:        #e2e8f0;
+      --max-width:     940px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.72;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--blue); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: #2b6cb0; }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .nav-inner {
+      max-width: var(--max-width); margin: 0 auto;
+      display: flex; gap: 2rem;
+      padding: 0.75rem 1.5rem;
+    }
+    nav a {
+      color: var(--text-secondary); font-size: 0.88rem;
+      font-weight: 500; white-space: nowrap;
+    }
+    nav a:hover { color: var(--blue); }
+
+    /* ===== Container ===== */
+    .container { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ===== Hero ===== */
+    .hero {
+      text-align: center; padding: 4.5rem 0 3rem;
+      background: linear-gradient(180deg, var(--blue-soft) 0%, var(--bg) 100%);
+    }
+    .hero h1 {
+      font-size: 2.6rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    .hero .subtitle {
+      font-size: 1.15rem; color: var(--text-secondary);
+      margin-bottom: 1.25rem; line-height: 1.6;
+    }
+    .hero .authors {
+      font-size: 1rem; color: var(--text); margin-bottom: 0.25rem;
+    }
+    .hero .affiliation {
+      font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;
+    }
+
+    /* Badges */
+    .badges {
+      display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.35rem 0.85rem; border-radius: 20px;
+      font-size: 0.82rem; font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .badge.blue  { background: var(--blue-light);  color: #2b6cb0; }
+    .badge.green { background: var(--green-light); color: #276749; }
+
+    .badge svg { width: 15px; height: 15px; }
+
+    /* Hero links */
+    .hero .links {
+      display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+      font-size: 0.92rem; margin-top: 0.3rem;
+    }
+    .hero .links a { font-weight: 600; }
+
+    /* Teaser */
+    .teaser { margin: 2.5rem 0 0; text-align: center; }
+    .teaser img {
+      width: 100%; max-width: 780px; border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border: 1px solid var(--border);
+    }
+
+    /* ===== Sections ===== */
+    section { padding: 3.5rem 0; }
+    section.alt { background: var(--bg-soft); }
+
+    h2 {
+      font-size: 1.6rem; font-weight: 700; margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    h3 {
+      font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem;
+      color: var(--blue);
+    }
+
+    p { margin-bottom: 1rem; color: var(--text-secondary); }
+
+    /* ===== Abstract ===== */
+    .abstract-box {
+      background: var(--bg-soft); border-left: 4px solid var(--blue);
+      border-radius: 0 8px 8px 0; padding: 1.5rem 1.8rem; margin: 1rem 0;
+    }
+    .abstract-box p { margin-bottom: 0; }
+
+    /* ===== Figures ===== */
+    .figure {
+      text-align: center; margin: 2rem 0;
+    }
+    .figure img {
+      max-width: 100%; border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border: 1px solid var(--border);
+    }
+    .figure .caption {
+      margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ===== Cards ===== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem; margin: 1.5rem 0;
+    }
+    .card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.3rem;
+    }
+    .card:hover {
+      border-color: var(--blue);
+      box-shadow: 0 2px 8px rgba(74,143,231,0.08);
+    }
+    .card .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .card p { font-size: 0.87rem; margin-bottom: 0; }
+
+    /* ===== Table ===== */
+    table {
+      width: 100%; border-collapse: collapse; margin: 1.5rem 0;
+      font-size: 0.88rem;
+    }
+    th, td {
+      padding: 0.55rem 0.8rem; text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--blue-soft); font-weight: 600;
+      color: #2b6cb0; font-size: 0.8rem;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    tr:hover td { background: var(--bg-soft); }
+
+    /* ===== BibTeX ===== */
+    .bibtex-box {
+      position: relative; background: var(--bg-code);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 1.25rem; overflow-x: auto; margin: 1rem 0;
+    }
+    .bibtex-box pre {
+      font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
+      font-size: 0.82rem; color: var(--text-secondary);
+      line-height: 1.6; white-space: pre;
+    }
+    .copy-btn {
+      position: absolute; top: 0.6rem; right: 0.6rem;
+      padding: 0.35rem 0.85rem; font-size: 0.78rem;
+      background: var(--bg); color: var(--text-secondary);
+      border: 1px solid var(--border); border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .copy-btn:hover {
+      background: var(--blue); color: #fff; border-color: var(--blue);
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      text-align: center; padding: 2rem 0 3rem;
+      font-size: 0.82rem; color: var(--text-secondary);
+      border-top: 1px solid var(--border);
+    }
+    footer a { color: var(--text-secondary); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.8rem; }
+      nav .nav-inner { gap: 1rem; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <div class="container">
+      <h1>MMDynOpt</h1>
+      <p class="subtitle">
+        Dynamic Multi-turn Optimization for Multimodal LLM Agents<br>via End-to-End Reinforcement Learning
+      </p>
+
+      <!-- 🎉 Announcement placeholder: -->
+      <!-- <p style="color:var(--green);font-weight:600;margin-bottom:1rem;">🎉 Accepted to XXX 2026!</p> -->
+
+      <div class="badges">
+        <a href="" class="badge blue">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Paper
+        </a>
+        <a href="https://github.com/QwenQKing/MMDynOpt" class="badge blue">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          Code
+        </a>
+        <a href="" class="badge green">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          Dataset
+        </a>
+      </div>
+
+      <div class="links">
+        <a href="">📄 Paper</a>
+        <a href="https://github.com/QwenQKing/MMDynOpt">💻 Code</a>
+        <a href="">🤗 Model</a>
+        <a href="mailto:wenjinliu23@outlook.com">💬 Contact</a>
+      </div>
+
+      <div class="teaser">
+        <img src="static/images/teaser.png" alt="MMDynOpt overview">
+        <p class="caption"><b>Figure 1:</b> An example of MMDynOpt-Agent. The agent enhances MLLM reasoning by dynamically optimizing prompts.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Abstract ===== -->
+  <section id="abstract">
+    <div class="container">
+      <h2>Abstract</h2>
+      <div class="abstract-box">
+        <p>
+          We introduce <b>MMDynOpt</b>, an <b>end-to-end reinforcement learning framework</b> that trains small-scale LLMs to act as dynamic multimodal agents. The agent learns <b>when and how</b> to query external multimodal LLMs, refine prompts, and aggregate evidence across multiple reasoning rounds. By leveraging <b>GRPO</b> (Group Relative Policy Optimization) with composite reward signals—format adherence, answer correctness (EM/F1), and inference budget penalties—MMDynOpt produces agents that achieve <b>strong task-solving performance</b> while maintaining computational efficiency. Experiments across <b>15 multimodal benchmarks</b> spanning finance, medical, science, and math domains demonstrate consistent improvements over baseline approaches.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Method ===== -->
+  <section id="method" class="alt">
+    <div class="container">
+      <h2>Method</h2>
+
+      <div class="figure">
+        <img src="static/images/framework.png" alt="MMDynOpt Framework">
+        <p class="caption"><b>Figure 3:</b> Overview of the MMDynOpt-Agent framework. A multimodal agent is trained via reinforcement learning to dynamically generate optimized prompts for MLLMs. DOP: dynamic optimization prompt. R. R.: reasoning response.</p>
+      </div>
+
+      <h3>Key Components</h3>
+      <div class="card-grid">
+        <div class="card">
+          <div class="icon">🎯</div>
+          <h4>Dynamic Prompt Optimization</h4>
+          <p>The agent learns to generate tailored prompts that elicit better reasoning from external multimodal LLMs, adapting its strategy across turns.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🔄</div>
+          <h4>Multi-turn Agent Interaction</h4>
+          <p>Through iterative querying and evidence aggregation, the agent progressively refines its understanding and produces more accurate answers.</p>
+        </div>
+        <div class="card">
+          <div class="icon">💰</div>
+          <h4>Budget-Aware Training</h4>
+          <p>A budget penalty in the reward function encourages efficient agent behavior, penalizing excessive LLM calls and token usage.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🏆</div>
+          <h4>Composite Reward Design</h4>
+          <p>Format reward + answer correctness (EM/F1) + budget penalty form a unified RL objective that optimizes both quality and efficiency.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Results ===== -->
+  <section id="results">
+    <div class="container">
+      <h2>Results</h2>
+
+      <h3>Training Dataset Performance</h3>
+      <div class="figure">
+        <img src="static/images/fig4.png" alt="Training Results">
+        <p class="caption"><b>Figure 4:</b> Comparison of average EM, F1, and SSim of 4 MLLMs with and without MMDynOpt-Agent on 9 training datasets.</p>
+      </div>
+
+      <h3 style="margin-top:2rem;">Out-of-Distribution Generalization</h3>
+      <div class="figure">
+        <img src="static/images/fig5.png" alt="OOD Results">
+        <p class="caption"><b>Figure 5:</b> Comparison of F1 scores of four unseen MLLMs with and without MMDynOpt-Agent on five OOD datasets.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Benchmarks ===== -->
+  <section id="benchmarks" class="alt">
+    <div class="container">
+      <h2>Evaluation Benchmarks</h2>
+      <p>15 multimodal benchmarks across 4 diverse domains:</p>
+      <table>
+        <tr>
+          <th>💰 Finance</th><th>🏥 Medical</th><th>🔬 Science</th><th>📐 Math & Vision</th>
+        </tr>
+        <tr>
+          <td>FinChart-Bench</td><td>MedXpertQA</td><td>ScienceQA</td><td>MathVista</td>
+        </tr>
+        <tr>
+          <td>FinMME</td><td>OmniMedVQA</td><td>GEOQA</td><td>MULTI-Benchmark</td>
+        </tr>
+        <tr>
+          <td>VisFinEval</td><td>PMC-VQA</td><td>SeePhys</td><td>AI2D</td>
+        </tr>
+        <tr>
+          <td>finance-QA-Vision</td><td>PathVQA</td><td></td><td></td>
+        </tr>
+        <tr>
+          <td></td><td>VQA-RAD</td><td></td><td></td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== BibTeX ===== -->
+  <section id="bibtex">
+    <div class="container">
+      <h2>BibTeX</h2>
+      <div class="bibtex-box" style="position:relative;">
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('bibtex-code').innerText)">📋 Copy</button>
+        <pre id="bibtex-code">@misc{mmdynopt2025,
+      title={MMDynOpt: Dynamic Multi-turn Optimization for Multimodal LLM Agents
+             via End-to-end Reinforcement Learning},
+      author={},
+      year={2025},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="container">
+      <p>
+        Template adapted from <a href="https://nerfies.github.io/">Nerfies</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/QwenQKing/MMDynOpt">Source Code</a>
+        &nbsp;·&nbsp;
+        Contact: <a href="mailto:wenjinliu23@outlook.com">wenjinliu23@outlook.com</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
