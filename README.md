@@ -31,16 +31,6 @@
 
 By integrating **dynamic multi-turn agent interaction** with **reinforcement learning**, **MMDynOpt** offers a **plug-and-play framework** that supports both **training** and **evaluation** with various multimodal LLMs serving as the external environment.
 
-## Experimental Results
-
-<div align="center">
-  <img src="Fig/fig4.png" width="80%"/>
-  <p><b>Figure 4:</b> Comparison of average EM, F1, and SSim of 4 MLLMs with and without MMDynOpt-Agent on 9 training datasets.</p>
-  <br/>
-  <img src="Fig/fig5.png" width="80%"/>
-  <p><b>Figure 5:</b> Comparison of F1 scores of four unseen MLLMs with and without MMDynOpt-Agent on five OOD datasets.</p>
-</div>
-
 ## Installation
 
 ### Environment Setup
