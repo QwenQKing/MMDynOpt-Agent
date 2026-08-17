@@ -1,15 +1,8 @@
-# MMDynOpt: Dynamic Multi-turn Optimization for Multimodal LLM Agents
-
 <div align="center">
-
-[![arXiv](https://img.shields.io/badge/arXiv-Paper-b31b1b.svg)]()
-[![Homepage](https://img.shields.io/badge/Homepage-MMDynOpt-black.svg)]()
-[![Dataset](https://img.shields.io/badge/Dataset-HuggingFace-blue.svg?logo=huggingface)]()
-[![HF Models](https://img.shields.io/badge/Model-HuggingFace-orange.svg?logo=huggingface)]()
 
 ### **MMDynOpt**: End-to-End Reinforcement Learning for Dynamic Multi-turn Multimodal Agent Optimization
 
-[📄 Paper]() | [🚀 Quick Start](#quick-start) | [💬 Contact](mailto:wenjinliu23@outlook.com)
+[📄 Paper](http://arxiv.org/abs/2608.14026) | [🏠 Homepage](https://github.com/QwenQKing/MMDynOpt-Agent) | [🚀 Quick Start](#quick-start) | [💬 Contact](mailto:wenjinliu23@outlook.com)
 
 </div>
 
@@ -200,12 +193,14 @@ MMDynOpt employs a composite reward function:
 If you find this work helpful for your research, please cite:
 
 ```bibtex
-@misc{mmdynopt2025,
-      title={MMDynOpt: Dynamic Multi-turn Optimization for Multimodal LLM Agents via End-to-end Reinforcement Learning},
-      author={},
-      year={2025},
+@misc{mmdynopt2026,
+      title={MMDynOpt-Agent: Dynamic Optimization for Multimodal Large Language Model Reasoning via Reinforcement Learning},
+      author={Wenjin Liu and Haoran Luo and Fayuan Ke and Zhenghong Lin and Yue Lu and Zhe Cui and Anh Tuan Luu and Carl Yang},
+      year={2026},
+      eprint={2608.14026},
       archivePrefix={arXiv},
-      primaryClass={cs.CL},
+      primaryClass={cs.CE},
+      url={https://arxiv.org/abs/2608.14026},
 }
 ```
 
