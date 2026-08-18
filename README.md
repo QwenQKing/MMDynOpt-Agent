@@ -2,7 +2,7 @@
 
 ### **MMDynOpt**: End-to-End Reinforcement Learning for Dynamic Multi-turn Multimodal Agent Optimization
 
-[📄 Paper](http://arxiv.org/abs/2608.14026) | [🏠 Homepage](https://github.com/QwenQKing/MMDynOpt-Agent) | [🚀 Quick Start](#quick-start) | [💬 Contact](mailto:wenjinliu23@outlook.com)
+[📄 Paper](https://arxiv.org/abs/2608.14026) | [🏠 Homepage](https://qwenqking.github.io/MMDynOpt-Agent/) | [🚀 Quick Start](#quick-start) | [💬 Contact](mailto:wenjinliu23@outlook.com)
 
 </div>
 
