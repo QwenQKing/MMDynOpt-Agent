@@ -1,402 +1,306 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="MMDynOpt-Agent: Dynamic Optimization for Multimodal Large Language Model Reasoning via Reinforcement Learning">
-  <title>MMDynOpt-Agent | Dynamic Optimization for Multimodal LLM Reasoning</title>
+  <meta name="theme-color" content="#f8fafc">
+  <meta property="og:title" content="MMDynOpt-Agent">
+  <meta property="og:description" content="Dynamic Optimization for Multimodal Large Language Model Reasoning via Reinforcement Learning">
+  <meta property="og:image" content="static/images/teaser.png">
+  <title>MMDynOpt-Agent | Project Page</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Google Sans', 'Inter', 'ui-sans-serif', 'system-ui'] },
+          colors: {
+            mmdBlue: '#246BFD',
+            mmdCyan: '#16C7DE',
+            mmdMint: '#3EDDB3'
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&amp;display=swap">
+
+  <script>
+    const THEME_KEY = 'mmdynopt-theme';
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) document.documentElement.classList.add('dark');
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+    }
+  </script>
 
   <style>
-    :root {
-      --bg:            #ffffff;
-      --bg-soft:       #f7f9fc;
-      --bg-card:       #f0f4f8;
-      --bg-code:       #f4f7fa;
-      --text:          #2d3748;
-      --text-secondary:#5a6c7d;
-      --blue:          #4a8fe7;
-      --blue-light:    #dceeff;
-      --blue-soft:     #eef5fc;
-      --green:         #4caf87;
-      --green-light:   #d4f1e4;
-      --green-soft:    #eefaf4;
-      --border:        #e2e8f0;
-      --max-width:     940px;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.72;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a { color: var(--blue); text-decoration: none; transition: color 0.2s; }
-    a:hover { color: #2b6cb0; }
-
-    /* ===== Navigation ===== */
-    nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
-    nav .nav-inner {
-      max-width: var(--max-width); margin: 0 auto;
-      display: flex; gap: 2rem;
-      padding: 0.75rem 1.5rem;
-    }
-    nav a {
-      color: var(--text-secondary); font-size: 0.88rem;
-      font-weight: 500; white-space: nowrap;
-    }
-    nav a:hover { color: var(--blue); }
-
-    /* ===== Container ===== */
-    .container { max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; }
-
-    /* ===== Hero ===== */
-    .hero {
-      text-align: center; padding: 4.5rem 0 3rem;
-      background: linear-gradient(180deg, var(--blue-soft) 0%, var(--bg) 100%);
-    }
-    .hero h1 {
-      font-size: 2.6rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--blue), var(--green));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    body { font-family: 'Google Sans', Inter, ui-sans-serif, system-ui, sans-serif; }
+    .gradient-text {
+      background: linear-gradient(100deg, #246bfd 0%, #16c7de 48%, #35d4a8 100%);
+      -webkit-background-clip: text;
       background-clip: text;
-      margin-bottom: 0.5rem;
+      -webkit-text-fill-color: transparent;
     }
-    .hero .subtitle {
-      font-size: 1.15rem; color: var(--text-secondary);
-      margin-bottom: 1.25rem; line-height: 1.6;
+    .glass {
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow: 0 18px 55px rgba(25, 65, 115, 0.11);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
-    .hero .authors {
-      font-size: 1rem; color: var(--text); margin-bottom: 0.25rem;
+    .dark .glass {
+      background: rgba(15, 23, 42, 0.66);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
     }
-    .hero .affiliation {
-      font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;
+    .hero-grid {
+      background-image:
+        linear-gradient(rgba(36, 107, 253, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(36, 107, 253, 0.045) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, black, transparent 92%);
     }
-
-    /* Badges */
-    .badges {
-      display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem;
+    .dark .hero-grid {
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
     }
-    .badge {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      padding: 0.35rem 0.85rem; border-radius: 20px;
-      font-size: 0.82rem; font-weight: 600;
-      border: 1px solid transparent;
+    .paper-image { background: linear-gradient(145deg, rgba(36,107,253,.045), rgba(62,221,179,.07)); }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 54px;
+      height: 4px;
+      margin: 14px auto 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #246bfd, #3eddb3);
     }
-    .badge.blue  { background: var(--blue-light);  color: #2b6cb0; }
-    .badge.green { background: var(--green-light); color: #276749; }
-
-    .badge svg { width: 15px; height: 15px; }
-
-    /* Hero links */
-    .hero .links {
-      display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
-      font-size: 0.92rem; margin-top: 0.3rem;
-    }
-    .hero .links a { font-weight: 600; }
-
-    /* Teaser */
-    .teaser { margin: 2.5rem 0 0; text-align: center; }
-    .teaser img {
-      width: 100%; max-width: 780px; border-radius: 10px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-      border: 1px solid var(--border);
-    }
-
-    /* ===== Sections ===== */
-    section { padding: 3.5rem 0; }
-    section.alt { background: var(--bg-soft); }
-
-    h2 {
-      font-size: 1.6rem; font-weight: 700; margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: 0.4rem;
-    }
-    h3 {
-      font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem;
-      color: var(--blue);
-    }
-
-    p { margin-bottom: 1rem; color: var(--text-secondary); }
-
-    /* ===== Abstract ===== */
-    .abstract-box {
-      background: var(--bg-soft); border-left: 4px solid var(--blue);
-      border-radius: 0 8px 8px 0; padding: 1.5rem 1.8rem; margin: 1rem 0;
-    }
-    .abstract-box p { margin-bottom: 0; }
-
-    /* ===== Figures ===== */
-    .figure {
-      text-align: center; margin: 2rem 0;
-    }
-    .figure img {
-      max-width: 100%; border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      border: 1px solid var(--border);
-    }
-    .figure .caption {
-      margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    /* ===== Cards ===== */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 1rem; margin: 1.5rem 0;
-    }
-    .card {
-      background: var(--bg); border: 1px solid var(--border);
-      border-radius: 10px; padding: 1.3rem;
-    }
-    .card:hover {
-      border-color: var(--blue);
-      box-shadow: 0 2px 8px rgba(74,143,231,0.08);
-    }
-    .card .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-    .card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .card p { font-size: 0.87rem; margin-bottom: 0; }
-
-    /* ===== Table ===== */
-    table {
-      width: 100%; border-collapse: collapse; margin: 1.5rem 0;
-      font-size: 0.88rem;
-    }
-    th, td {
-      padding: 0.55rem 0.8rem; text-align: center;
-      border-bottom: 1px solid var(--border);
-    }
-    th {
-      background: var(--blue-soft); font-weight: 600;
-      color: #2b6cb0; font-size: 0.8rem;
-      text-transform: uppercase; letter-spacing: 0.04em;
-    }
-    tr:hover td { background: var(--bg-soft); }
-
-    /* ===== BibTeX ===== */
-    .bibtex-box {
-      position: relative; background: var(--bg-code);
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 1.25rem; overflow-x: auto; margin: 1rem 0;
-    }
-    .bibtex-box pre {
-      font-family: 'SF Mono', 'Fira Code', 'Menlo', monospace;
-      font-size: 0.82rem; color: var(--text-secondary);
-      line-height: 1.6; white-space: pre;
-    }
-    .copy-btn {
-      position: absolute; top: 0.6rem; right: 0.6rem;
-      padding: 0.35rem 0.85rem; font-size: 0.78rem;
-      background: var(--bg); color: var(--text-secondary);
-      border: 1px solid var(--border); border-radius: 6px;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .copy-btn:hover {
-      background: var(--blue); color: #fff; border-color: var(--blue);
-    }
-
-    /* ===== Footer ===== */
-    footer {
-      text-align: center; padding: 2rem 0 3rem;
-      font-size: 0.82rem; color: var(--text-secondary);
-      border-top: 1px solid var(--border);
-    }
-    footer a { color: var(--text-secondary); }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 1.8rem; }
-      nav .nav-inner { gap: 1rem; font-size: 0.8rem; }
+    .lift { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+    .lift:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(31, 73, 125, .13); border-color: rgba(36,107,253,.2); }
+    .dark .lift:hover { box-shadow: 0 20px 48px rgba(0, 0, 0, .28); }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
     }
   </style>
 </head>
-<body>
 
-  <!-- ===== Navigation ===== -->
-  <nav>
-    <div class="nav-inner">
-      <a href="#abstract">Abstract</a>
-      <a href="#method">Method</a>
-      <a href="#results">Results</a>
-      <a href="#bibtex">BibTeX</a>
-    </div>
-  </nav>
+<body class="bg-slate-50 text-slate-900 selection:bg-cyan-200 dark:bg-slate-950 dark:text-slate-100 dark:selection:bg-cyan-800">
+  <div class="fixed inset-0 -z-20 overflow-hidden pointer-events-none">
+    <div class="absolute inset-0 hero-grid"></div>
+    <div class="absolute -top-40 -right-32 h-[34rem] w-[34rem] rounded-full bg-blue-400/25 blur-[100px] dark:bg-blue-600/20"></div>
+    <div class="absolute top-[24rem] -left-48 h-[32rem] w-[32rem] rounded-full bg-emerald-300/20 blur-[110px] dark:bg-emerald-600/15"></div>
+    <div class="absolute bottom-20 right-[12%] h-[26rem] w-[26rem] rounded-full bg-violet-300/15 blur-[110px] dark:bg-violet-700/10"></div>
+  </div>
 
-  <!-- ===== Hero ===== -->
-  <header class="hero">
-    <div class="container">
-      <h1>MMDynOpt-Agent</h1>
-      <p class="subtitle">
-        Dynamic Optimization for Multimodal Large Language Model Reasoning<br>via Reinforcement Learning
-      </p>
-
-      <p class="authors">
-        Wenjin Liu, Haoran Luo, Fayuan Ke, Zhenghong Lin, Yue Lu, Zhe Cui, Anh Tuan Luu, Carl Yang
-      </p>
-
-      <!-- 🎉 Announcement placeholder: -->
-      <!-- <p style="color:var(--green);font-weight:600;margin-bottom:1rem;">🎉 Accepted to XXX 2026!</p> -->
-
-      <div class="badges">
-        <a href="https://arxiv.org/abs/2608.14026" class="badge blue">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          Paper
+  <header class="sticky top-0 z-50">
+    <div class="mx-auto max-w-6xl px-4 py-3">
+      <div class="glass flex items-center justify-between rounded-2xl px-4 py-3">
+        <a href="#top" class="flex items-center gap-3 font-bold tracking-tight no-underline">
+          <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-blue-600 via-cyan-500 to-emerald-400 text-sm text-white shadow-lg shadow-blue-500/20">M</span>
+          <span>MMDynOpt-Agent</span>
         </a>
-        <a href="https://github.com/QwenQKing/MMDynOpt-Agent" class="badge blue">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          Code
-        </a>
-      </div>
 
-      <div class="links">
-        <a href="https://arxiv.org/abs/2608.14026">📄 Paper</a>
-        <a href="https://github.com/QwenQKing/MMDynOpt-Agent">💻 Code</a>
-        <a href="mailto:wenjinliu23@outlook.com">💬 Contact</a>
-      </div>
+        <nav class="hidden items-center gap-5 text-sm text-slate-600 dark:text-slate-300 md:flex" aria-label="Main navigation">
+          <a href="#abstract" class="hover:text-blue-600">Abstract</a>
+          <a href="#method" class="hover:text-blue-600">Method</a>
+          <a href="#results" class="hover:text-blue-600">Results</a>
+          <a href="#benchmarks" class="hover:text-blue-600">Benchmarks</a>
+          <a href="#bibtex" class="hover:text-blue-600">BibTeX</a>
+        </nav>
 
-      <div class="teaser">
-        <img src="static/images/teaser.png" alt="MMDynOpt overview">
-        <p class="caption"><b>Figure 1:</b> An example of MMDynOpt-Agent. The agent enhances MLLM reasoning by dynamically optimizing prompts.</p>
+        <button onclick="toggleTheme()" class="rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-white/60 dark:text-slate-200 dark:hover:bg-white/10" aria-label="Toggle color theme">
+          <i class="fa-solid fa-circle-half-stroke mr-1.5"></i><span class="hidden sm:inline">Theme</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- ===== Abstract ===== -->
-  <section id="abstract">
-    <div class="container">
-      <h2>Abstract</h2>
-      <div class="abstract-box">
-        <p>
-          We introduce <b>MMDynOpt</b>, an <b>end-to-end reinforcement learning framework</b> that trains small-scale LLMs to act as dynamic multimodal agents. The agent learns <b>when and how</b> to query external multimodal LLMs, refine prompts, and aggregate evidence across multiple reasoning rounds. By leveraging <b>GRPO</b> (Group Relative Policy Optimization) with composite reward signals—format adherence, answer correctness (EM/F1), and inference budget penalties—MMDynOpt produces agents that achieve <b>strong task-solving performance</b> while maintaining computational efficiency. Experiments across <b>15 multimodal benchmarks</b> spanning finance, medical, science, and math domains demonstrate consistent improvements over baseline approaches.
+  <main id="top" class="mx-auto max-w-6xl px-4 pb-20">
+    <section class="pt-12 text-center md:pt-20">
+      <div class="mx-auto inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-blue-50/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-blue-700 shadow-sm dark:border-blue-800/60 dark:bg-blue-950/40 dark:text-blue-300">
+        <span class="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_0_5px_rgba(52,211,153,.13)]"></span>
+        Multimodal Agent Reasoning · 2026
+      </div>
+
+      <h1 class="mx-auto mt-7 max-w-6xl text-5xl font-bold leading-[1.03] tracking-[-0.055em] md:text-7xl">
+        <span class="gradient-text">MMDynOpt-Agent</span>
+      </h1>
+      <p class="mx-auto mt-6 max-w-5xl text-2xl font-semibold leading-snug tracking-tight text-slate-800 dark:text-slate-100 md:text-4xl">
+        Dynamic Optimization for Multimodal Large Language Model Reasoning via Reinforcement Learning
+      </p>
+
+      <div class="mx-auto mt-7 max-w-5xl text-base leading-8 text-slate-600 dark:text-slate-300 md:text-lg">
+        <span class="font-semibold text-blue-700 dark:text-blue-300">Wenjin Liu</span><span> · Haoran Luo · Fayuan Ke · Zhenghong Lin · Yue Lu · Zhe Cui · Anh Tuan Luu · Carl Yang</span>
+      </div>
+
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="https://arxiv.org/abs/2608.14026" target="_blank" rel="noopener" class="glass rounded-full px-6 py-3 font-semibold transition hover:scale-[1.03]">
+          <i class="fa-solid fa-file-pdf mr-2 text-red-500"></i>Paper
+        </a>
+        <a href="https://github.com/QwenQKing/MMDynOpt-Agent" target="_blank" rel="noopener" class="glass rounded-full px-6 py-3 font-semibold transition hover:scale-[1.03]">
+          <i class="fa-brands fa-github mr-2"></i>Code
+        </a>
+        <a href="mailto:wenjinliu23@outlook.com" class="glass rounded-full px-6 py-3 font-semibold transition hover:scale-[1.03]">
+          <i class="fa-solid fa-envelope mr-2 text-blue-500"></i>Contact
+        </a>
+      </div>
+
+      <div class="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 md:grid-cols-4">
+        <div class="glass rounded-2xl px-4 py-4"><div class="text-2xl font-bold gradient-text">15</div><div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Benchmarks</div></div>
+        <div class="glass rounded-2xl px-4 py-4"><div class="text-lg font-bold text-slate-800 dark:text-white">Multi-turn</div><div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Interaction</div></div>
+        <div class="glass rounded-2xl px-4 py-4"><div class="text-lg font-bold text-slate-800 dark:text-white">End-to-end</div><div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">RL Training</div></div>
+        <div class="glass rounded-2xl px-4 py-4"><div class="text-lg font-bold text-slate-800 dark:text-white">Transferable</div><div class="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Across MLLMs</div></div>
+      </div>
+
+      <figure class="glass mx-auto mt-12 max-w-4xl rounded-3xl p-3">
+        <div class="paper-image overflow-hidden rounded-2xl bg-white p-3 dark:bg-slate-900">
+          <img src="static/images/teaser.png" alt="MMDynOpt-Agent multimodal reasoning example" class="mx-auto w-full max-w-3xl rounded-xl">
+        </div>
+        <figcaption class="px-4 py-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          <strong>Figure 1.</strong> MMDynOpt-Agent progressively improves multimodal reasoning through dynamic multi-turn prompt optimization.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="abstract" class="mt-24 scroll-mt-24">
+      <h2 class="section-title text-center text-3xl font-bold tracking-tight md:text-4xl">Abstract</h2>
+      <div class="glass mt-8 rounded-3xl p-7 md:p-10">
+        <p class="text-justify text-base leading-8 text-slate-700 dark:text-slate-200 md:text-lg">
+          Recently, multimodal large language models have demonstrated strong potential in visual understanding and complex reasoning. However, they often struggle to transform multimodal evidence and question semantics into effective reasoning conditions. We propose <strong>MMDynOpt-Agent</strong>, which formulates dynamic multimodal reasoning optimization as a Markov decision process and trains a lightweight policy through <strong>end-to-end reinforcement learning</strong>. The agent interacts with a target MLLM as its environment, adaptively steering reasoning with multi-turn dynamic optimization prompts. A composite reward combines format compliance, answer correctness, and budget awareness to jointly improve accuracy and efficiency. The learned agent is transferable across target MLLMs and generalizes over fifteen public benchmarks.
         </p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ===== Method ===== -->
-  <section id="method" class="alt">
-    <div class="container">
-      <h2>Method</h2>
+    <section id="method" class="mt-24 scroll-mt-24">
+      <h2 class="section-title text-center text-3xl font-bold tracking-tight md:text-4xl">Method</h2>
+      <p class="mx-auto mt-6 max-w-3xl text-center text-slate-600 dark:text-slate-300 md:text-lg">A lightweight policy observes the evolving interaction, generates a dynamic optimization prompt, and learns from outcome- and efficiency-aware rewards.</p>
 
-      <div class="figure">
-        <img src="static/images/framework.png" alt="MMDynOpt Framework">
-        <p class="caption"><b>Figure 3:</b> Overview of the MMDynOpt-Agent framework. A multimodal agent is trained via reinforcement learning to dynamically generate optimized prompts for MLLMs. DOP: dynamic optimization prompt. R. R.: reasoning response.</p>
-      </div>
-
-      <h3>Key Components</h3>
-      <div class="card-grid">
-        <div class="card">
-          <div class="icon">🎯</div>
-          <h4>Dynamic Prompt Optimization</h4>
-          <p>The agent learns to generate tailored prompts that elicit better reasoning from external multimodal LLMs, adapting its strategy across turns.</p>
+      <div class="glass mt-8 rounded-3xl p-4 md:p-7">
+        <div class="paper-image overflow-hidden rounded-2xl bg-white p-3 dark:bg-slate-900 md:p-5">
+          <img src="static/images/framework.png" alt="MMDynOpt-Agent framework" class="w-full rounded-lg">
         </div>
-        <div class="card">
-          <div class="icon">🔄</div>
-          <h4>Multi-turn Agent Interaction</h4>
-          <p>Through iterative querying and evidence aggregation, the agent progressively refines its understanding and produces more accurate answers.</p>
+        <p class="mt-4 px-2 text-center text-sm leading-relaxed text-slate-600 dark:text-slate-300"><strong>Figure 2.</strong> Overview of MMDynOpt-Agent. DOP denotes dynamic optimization prompt; R.R. denotes reasoning response.</p>
+      </div>
+
+      <div class="mt-6 grid gap-5 md:grid-cols-3">
+        <article class="glass lift rounded-3xl p-6">
+          <span class="grid h-10 w-10 place-items-center rounded-full bg-blue-100 text-sm font-bold text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">1</span>
+          <h3 class="mt-5 text-xl font-bold">Observe &amp; Diagnose</h3>
+          <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">The agent reads the task and complete interaction history to identify the next reasoning need.</p>
+        </article>
+        <article class="glass lift rounded-3xl p-6">
+          <span class="grid h-10 w-10 place-items-center rounded-full bg-cyan-100 text-sm font-bold text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">2</span>
+          <h3 class="mt-5 text-xl font-bold">Dynamically Optimize</h3>
+          <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">The policy generates a task- and turn-specific prompt instead of relying on a fixed strategy.</p>
+        </article>
+        <article class="glass lift rounded-3xl p-6">
+          <span class="grid h-10 w-10 place-items-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">3</span>
+          <h3 class="mt-5 text-xl font-bold">Reward Quality &amp; Efficiency</h3>
+          <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">Format, answer, and budget rewards encourage correct reasoning without unnecessary calls.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="results" class="mt-24 scroll-mt-24">
+      <h2 class="section-title text-center text-3xl font-bold tracking-tight md:text-4xl">Results</h2>
+      <p class="mx-auto mt-6 max-w-3xl text-center text-slate-600 dark:text-slate-300 md:text-lg">MMDynOpt-Agent delivers consistent improvements across target models and transfers to unseen multimodal environments.</p>
+
+      <div class="mt-8 grid gap-6 lg:grid-cols-2">
+        <article class="glass lift overflow-hidden rounded-3xl p-4 md:p-6">
+          <div class="mb-5 px-2">
+            <h3 class="text-xl font-bold">Broad metric improvements</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Average EM, F1, and semantic similarity improve across four target MLLMs.</p>
+          </div>
+          <div class="paper-image grid min-h-80 place-items-center rounded-2xl bg-white p-3 dark:bg-slate-900">
+            <img src="static/images/fig4.png" alt="Average EM, F1, and semantic similarity results" class="w-full rounded-lg">
+          </div>
+        </article>
+
+        <article class="glass lift overflow-hidden rounded-3xl p-4 md:p-6">
+          <div class="mb-5 px-2">
+            <h3 class="text-xl font-bold">Out-of-distribution transfer</h3>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">The learned policy retains its gains on unseen MLLMs and evaluation domains.</p>
+          </div>
+          <div class="paper-image grid min-h-80 place-items-center rounded-2xl bg-white p-3 dark:bg-slate-900">
+            <img src="static/images/fig5.png" alt="Out-of-distribution radar chart comparisons" class="max-h-[30rem] w-full object-contain rounded-lg">
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="benchmarks" class="mt-24 scroll-mt-24">
+      <h2 class="section-title text-center text-3xl font-bold tracking-tight md:text-4xl">Evaluation Benchmarks</h2>
+      <p class="mx-auto mt-6 max-w-3xl text-center text-slate-600 dark:text-slate-300 md:text-lg">Fifteen public benchmarks spanning four challenging multimodal domains.</p>
+
+      <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <article class="glass lift rounded-3xl p-6">
+          <div class="text-3xl">💰</div><h3 class="mt-3 text-lg font-bold">Finance</h3>
+          <ul class="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300"><li>FinChart-Bench</li><li>FinMME</li><li>VisFinEval</li><li>finance-QA-Vision</li></ul>
+        </article>
+        <article class="glass lift rounded-3xl p-6">
+          <div class="text-3xl">🏥</div><h3 class="mt-3 text-lg font-bold">Medical</h3>
+          <ul class="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300"><li>MedXpertQA</li><li>OmniMedVQA</li><li>PMC-VQA</li><li>PathVQA</li><li>VQA-RAD</li></ul>
+        </article>
+        <article class="glass lift rounded-3xl p-6">
+          <div class="text-3xl">🔬</div><h3 class="mt-3 text-lg font-bold">Science</h3>
+          <ul class="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300"><li>ScienceQA</li><li>GEOQA</li><li>SeePhys</li></ul>
+        </article>
+        <article class="glass lift rounded-3xl p-6">
+          <div class="text-3xl">📐</div><h3 class="mt-3 text-lg font-bold">Math &amp; Vision</h3>
+          <ul class="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300"><li>MathVista</li><li>MULTI-Benchmark</li><li>AI2D</li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="bibtex" class="mt-24 scroll-mt-24">
+      <h2 class="section-title text-center text-3xl font-bold tracking-tight md:text-4xl">BibTeX</h2>
+      <div class="mt-8 overflow-hidden rounded-3xl border border-slate-700 bg-slate-950 text-slate-100 shadow-2xl shadow-slate-950/20">
+        <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
+          <div class="flex gap-2" aria-hidden="true"><i class="h-2.5 w-2.5 rounded-full bg-red-400"></i><i class="h-2.5 w-2.5 rounded-full bg-amber-300"></i><i class="h-2.5 w-2.5 rounded-full bg-emerald-400"></i></div>
+          <button id="copy-bibtex" type="button" class="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-slate-300 transition hover:bg-white/10">
+            <i class="fa-regular fa-copy mr-1.5"></i>Copy
+          </button>
         </div>
-        <div class="card">
-          <div class="icon">💰</div>
-          <h4>Budget-Aware Training</h4>
-          <p>A budget penalty in the reward function encourages efficient agent behavior, penalizing excessive LLM calls and token usage.</p>
-        </div>
-        <div class="card">
-          <div class="icon">🏆</div>
-          <h4>Composite Reward Design</h4>
-          <p>Format reward + answer correctness (EM/F1) + budget penalty form a unified RL objective that optimizes both quality and efficiency.</p>
-        </div>
+        <pre id="bibtex-code" class="overflow-x-auto p-6 text-xs leading-6 text-slate-200 md:p-8 md:text-sm"><code>@misc{mmdynopt2026,
+  title        = {MMDynOpt-Agent: Dynamic Optimization for Multimodal Large Language Model Reasoning via Reinforcement Learning},
+  author       = {Wenjin Liu and Haoran Luo and Fayuan Ke and Zhenghong Lin and Yue Lu and Zhe Cui and Anh Tuan Luu and Carl Yang},
+  year         = {2026},
+  eprint       = {2608.14026},
+  archivePrefix= {arXiv},
+  primaryClass = {cs.CE},
+  url          = {https://arxiv.org/abs/2608.14026}
+}</code></pre>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ===== Results ===== -->
-  <section id="results">
-    <div class="container">
-      <h2>Results</h2>
+    <footer class="mt-24 border-t border-slate-200/80 pt-10 text-center dark:border-white/10">
+      <div class="text-lg font-bold">MMDynOpt-Agent</div>
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Dynamic multimodal reasoning through reinforcement learning.</p>
+      <p class="mt-3 text-xs text-slate-400 dark:text-slate-500">Template style inspired by <a href="https://lntzm.github.io/showtable-page/" target="_blank" rel="noopener" class="hover:text-blue-500">ShowTable</a> and adapted from <a href="https://nerfies.github.io/" target="_blank" rel="noopener" class="hover:text-blue-500">Nerfies</a>.</p>
+    </footer>
+  </main>
 
-      <h3>Training Dataset Performance</h3>
-      <div class="figure">
-        <img src="static/images/fig4.png" alt="Training Results">
-        <p class="caption"><b>Figure 4:</b> Comparison of average EM, F1, and SSim of 4 MLLMs with and without MMDynOpt-Agent on 9 training datasets.</p>
-      </div>
-
-      <h3 style="margin-top:2rem;">Out-of-Distribution Generalization</h3>
-      <div class="figure">
-        <img src="static/images/fig5.png" alt="OOD Results">
-        <p class="caption"><b>Figure 5:</b> Comparison of F1 scores of four unseen MLLMs with and without MMDynOpt-Agent on five OOD datasets.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== Benchmarks ===== -->
-  <section id="benchmarks" class="alt">
-    <div class="container">
-      <h2>Evaluation Benchmarks</h2>
-      <p>15 multimodal benchmarks across 4 diverse domains:</p>
-      <table>
-        <tr>
-          <th>💰 Finance</th><th>🏥 Medical</th><th>🔬 Science</th><th>📐 Math & Vision</th>
-        </tr>
-        <tr>
-          <td>FinChart-Bench</td><td>MedXpertQA</td><td>ScienceQA</td><td>MathVista</td>
-        </tr>
-        <tr>
-          <td>FinMME</td><td>OmniMedVQA</td><td>GEOQA</td><td>MULTI-Benchmark</td>
-        </tr>
-        <tr>
-          <td>VisFinEval</td><td>PMC-VQA</td><td>SeePhys</td><td>AI2D</td>
-        </tr>
-        <tr>
-          <td>finance-QA-Vision</td><td>PathVQA</td><td></td><td></td>
-        </tr>
-        <tr>
-          <td></td><td>VQA-RAD</td><td></td><td></td>
-        </tr>
-      </table>
-    </div>
-  </section>
-
-  <!-- ===== BibTeX ===== -->
-  <section id="bibtex">
-    <div class="container">
-      <h2>BibTeX</h2>
-      <div class="bibtex-box" style="position:relative;">
-        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('bibtex-code').innerText)">📋 Copy</button>
-        <pre id="bibtex-code">@misc{mmdynopt2026,
-      title={MMDynOpt-Agent: Dynamic Optimization for Multimodal Large Language Model Reasoning via Reinforcement Learning},
-      author={Wenjin Liu and Haoran Luo and Fayuan Ke and Zhenghong Lin and Yue Lu and Zhe Cui and Anh Tuan Luu and Carl Yang},
-      year={2026},
-      eprint={2608.14026},
-      archivePrefix={arXiv},
-      primaryClass={cs.CE},
-      url={https://arxiv.org/abs/2608.14026},
-}</pre>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== Footer ===== -->
-  <footer>
-    <div class="container">
-      <p>
-        Template adapted from <a href="https://nerfies.github.io/">Nerfies</a>
-        &nbsp;·&nbsp;
-        <a href="https://github.com/QwenQKing/MMDynOpt-Agent">Source Code</a>
-        &nbsp;·&nbsp;
-        Contact: <a href="mailto:wenjinliu23@outlook.com">wenjinliu23@outlook.com</a>
-      </p>
-    </div>
-  </footer>
-
+  <script>
+    document.getElementById('copy-bibtex').addEventListener('click', async function () {
+      const button = this;
+      const citation = document.getElementById('bibtex-code').innerText;
+      try {
+        await navigator.clipboard.writeText(citation);
+        button.textContent = 'Copied';
+        setTimeout(() => { button.textContent = 'Copy'; }, 1600);
+      } catch (error) {
+        button.textContent = 'Select and copy';
+      }
+    });
+  </script>
 </body>
 </html>
