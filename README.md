@@ -122,16 +122,7 @@ MODEL = "your-local-model-name"
 
 ## Evaluation
 
-### 1. Merge Checkpoint
-
-```bash
-export CHECKPOINT_DIR='checkpoints/MMDynOpt/global_step_XX/actor'
-export HF_MODEL_PATH='./Qwen/Qwen3-4B'
-export TARGET_DIR='./merge_model/MMDynOpt_Qwen3-4B'
-bash model_merge.sh
-```
-
-### 2. Batch Evaluation
+### 1. Batch Evaluation
 
 Edit `mmdynopt_agent/scripts/eval.sh`:
 
@@ -150,7 +141,7 @@ bash mmdynopt_agent/scripts/eval.sh
 
 The script iterates over all 15 benchmarks in `eval_data/`, runs inference with the trained agent, and saves per-benchmark `res.json` files.
 
-### 3. Aggregate Results
+### 2. Aggregate Results
 
 ```bash
 python -m mmdynopt_agent.scripts.eval --res-dir ./your_results_dir
