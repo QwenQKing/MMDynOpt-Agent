@@ -3,7 +3,7 @@
 VAL_DATA_DIR=/path/to/your/eval_data
 RESULTS_BASE_DIR=/path/to/your/results_dir
 MODEL_PATH=/path/to/your/base_model
-CHECKPOINT_PATH=/path/to/your/checkpoint
+CHECKPOINT_PATH=/path/to/your/checkpoints/MMDynOpt/MMDynOpt/global_step_N
 GPUS=4
 
 SKIP_FILE="val.parquet"
@@ -135,8 +135,8 @@ run_eval() {
         +trainer.reward_mode="EM" \
         +trainer.val_before_train=True \
         +algorithm.filter_groups.enable=False \
-        trainer.resume_mode=auto \
-        trainer.val_only=$CHECKPOINT_PATH \
+        trainer.resume_mode=$CHECKPOINT_PATH \
+        trainer.val_only=True \
         trainer.val_only_save_dir=$SAVE_DIR
 }
 

@@ -39,7 +39,7 @@ def pad_to_max_stack(tensor_list: List[torch.Tensor], pad_token_id: int, dim: in
     return torch.stack(padded_tensor_list, dim=dim)
 
 
-class vLLMRollout_MultiTurn_MMSearch_R1(vLLMRollout):
+class vLLMRollout_MultiTurn_MMDynOpt(vLLMRollout):
 
     def __init__(self, model_path: str, config: DictConfig, tokenizer, model_hf_config, **kwargs):
 

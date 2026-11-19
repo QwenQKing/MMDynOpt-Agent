@@ -123,12 +123,12 @@ def compute_score_format(solution_str):
             return 0.0
 
         for i, assistant_block in enumerate(assistant_blocks[:-1]):
-            if (assistant_block.count('<redacted_thinking>') == 1 and
-                assistant_block.count('</redacted_thinking>') == 1 and
+            if (assistant_block.count('<think>') == 1 and
+                assistant_block.count('</think>') == 1 and
                 assistant_block.count('<prompt>') == 1 and
                 assistant_block.count('</prompt>') == 1):
                 think_match = re.search(
-                    r'^<redacted_thinking>(.*?)</redacted_thinking>(\s*)<prompt>(.*?)</prompt>$',
+                    r'^<think>(.*?)</think>(\s*)<prompt>(.*?)</prompt>$',
                     assistant_block,
                     re.DOTALL
                 )
@@ -145,7 +145,7 @@ def compute_score_format(solution_str):
                 format_reward += 0.15
 
             think_answer_match = re.search(
-                r'^<redacted_thinking>(.*?)</redacted_thinking>(.*?)<answer>(.*?)</answer>$',
+                r'^<think>(.*?)</think>(.*?)<answer>(.*?)</answer>$',
                 last_assistant_block,
                 re.DOTALL
             )

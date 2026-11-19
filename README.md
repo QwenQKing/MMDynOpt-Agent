@@ -128,7 +128,7 @@ Edit `mmdynopt_agent/scripts/eval.sh`:
 
 ```bash
 MODEL_PATH=/path/to/your/base_model
-CHECKPOINT_PATH=/path/to/your/checkpoint
+CHECKPOINT_PATH=/path/to/your/checkpoints/MMDynOpt/MMDynOpt/global_step_N
 VAL_DATA_DIR=/path/to/your/eval_data
 RESULTS_BASE_DIR=/path/to/your/results_dir
 ```
@@ -175,7 +175,7 @@ MMDynOpt employs a composite reward function:
 
 | Component | Description |
 |-----------|-------------|
-| **Format Reward** | Encourages structured output with `<redacted_thinking>`, `<prompt>`, and `<answer>` tags |
+| **Format Reward** | Encourages structured output with `<think>`, `<prompt>`, and `<answer>` tags |
 | **Answer Reward** | EM (Exact Match) or F1 score against ground truth |
 | **Budget Penalty** | Penalizes excessive LLM calls and token usage to encourage efficient agent behavior |
 
