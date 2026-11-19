@@ -117,7 +117,7 @@ Then update `mmdynopt_agent/utils/tools/mm_LM_env.py`:
 
 ```python
 BASE_URL = "http://<SERVER_IP>:8006/v1"
-MODEL = "your-local-model-name"
+MODEL = "Qwen3-VL-32B-Instruct"
 ```
 
 ## Evaluation

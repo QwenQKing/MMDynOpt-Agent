@@ -12,8 +12,8 @@ from PIL import Image
 
 
 API_KEY = "EMPTY"
-MODEL = ""
-BASE_URL = ""
+MODEL = "Qwen3-VL-32B-Instruct"
+BASE_URL = "http://127.0.0.1:8006/v1"
 
 
 DEFAULT_SYSTEM_CONTENT = (
