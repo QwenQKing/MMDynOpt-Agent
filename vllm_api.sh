@@ -1,11 +1,13 @@
 #!/bin/bash
 
 # Deploy the external multimodal LLM (target MLLM) as an OpenAI-compatible server.
-# After it starts, set BASE_URL / MODEL in mmdynopt_agent/utils/tools/mm_LM_env.py:
-#   BASE_URL = "http://<SERVER_IP>:8006/v1"
+# Run in a separate environment (see README "Local Model Deployment").
+# Uses GPUs 4-7 so that training / evaluation (run.sh / eval.sh, GPUs 0-3) can share one 8-GPU node.
+# mmdynopt_agent/utils/tools/mm_LM_env.py already points to this server:
+#   BASE_URL = "http://127.0.0.1:8006/v1"
 #   MODEL    = "Qwen3-VL-32B-Instruct"
 
-export CUDA_VISIBLE_DEVICES=0,1,2,3
+export CUDA_VISIBLE_DEVICES=4,5,6,7
 
 MODEL_PATH=/path/to/your/Qwen3-VL-32B-Instruct
 SERVED_MODEL_NAME=Qwen3-VL-32B-Instruct
@@ -15,7 +17,8 @@ python -m vllm.entrypoints.openai.api_server \
   --model ${MODEL_PATH} \
   --port ${PORT} \
   --tensor-parallel-size 4 \
-  --gpu-memory-utilization 0.85 \
+  --gpu-memory-utilization 0.5 \
+  --max-model-len 32768 \
   --trust-remote-code \
   --enable-prefix-caching \
   --served-model-name ${SERVED_MODEL_NAME} \

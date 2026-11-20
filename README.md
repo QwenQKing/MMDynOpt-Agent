@@ -99,24 +99,24 @@ Key training parameters (configurable in `run.sh`):
 
 ### 3. Local Model Deployment
 
-To deploy the external multimodal LLM locally via vLLM:
+To deploy the external multimodal LLM locally via vLLM (use a separate environment from `mmdynopt`, since Qwen3-VL requires newer vLLM / transformers):
 
 ```bash
 # Create environment
 conda create -n vllmapi python=3.12 -y
 conda activate vllmapi
 
-# Install dependencies
-pip install vllm transformers accelerate
+# Install dependencies (versions used in our experiments)
+pip install vllm==0.16.0 transformers==5.17.0 torch==2.9.1 accelerate
 
-# Start the OpenAI-compatible server
+# Start the OpenAI-compatible server (GPUs 4-7; training / evaluation use GPUs 0-3)
 nohup bash vllm_api.sh > api.out 2>&1 &
 ```
 
-Then update `mmdynopt_agent/utils/tools/mm_LM_env.py`:
+If the server runs on another machine, update `mmdynopt_agent/utils/tools/mm_LM_env.py`:
 
 ```python
-BASE_URL = "http://<SERVER_IP>:8006/v1"
+BASE_URL = "http://<SERVER_IP>:8006/v1"   # default: http://127.0.0.1:8006/v1
 MODEL = "Qwen3-VL-32B-Instruct"
 ```
 

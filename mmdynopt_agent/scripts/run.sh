@@ -13,7 +13,7 @@ export RAY_TEMP_DIR=/tmp/ray_mmdynopt
 export TRAIN_DATA_PATH=datasets/train.parquet
 export VAL_DATA_PATH=datasets/val.parquet
 
-export NO_PROXY=""
+export NO_PROXY="localhost,127.0.0.1,0.0.0.0"
 export no_proxy=$NO_PROXY
 
 export NCCL_IB_DISABLE=1
